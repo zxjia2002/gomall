@@ -3,6 +3,7 @@ package main
 import (
 	"net"
 	"time"
+	"log"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -12,6 +13,7 @@ import (
 	"github.com/zxjia2002/gomall/demo/demo_proto/kitex_gen/pbapi/echoservice"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"github.com/kitex-contrib/registry-consul"
 )
 
 func main() {
@@ -37,6 +39,13 @@ func kitexInit() (opts []server.Option) {
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 		ServiceName: conf.GetConf().Kitex.Service,
 	}))
+
+	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+    if err != nil {
+        log.Fatal(err)
+    }
+
+	opts = append(opts, server.WithRegistry(r))
 
 	// klog
 	logger := kitexlogrus.NewLogger()
