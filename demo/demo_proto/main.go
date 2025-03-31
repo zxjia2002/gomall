@@ -14,14 +14,21 @@ import (
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"github.com/kitex-contrib/registry-consul"
+	"github.com/joho/godotenv"
+	"github.com/zxjia2002/gomall/demo/demo_proto/biz/dal"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+	dal.Init()
 	opts := kitexInit()
 
 	svr := echoservice.NewServer(new(EchoServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}

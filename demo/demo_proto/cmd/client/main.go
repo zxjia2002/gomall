@@ -18,7 +18,7 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-    client, err := echoservice.NewClient("demo_proto", client.WithResolver(r))
+    client, err := echoservice.NewClient("gomall", client.WithResolver(r))
     if err != nil {
         log.Fatal(err)
     }
